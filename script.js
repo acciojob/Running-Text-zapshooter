@@ -1,38 +1,31 @@
-//your JS code here. If required.
-var typingTimer = null;
-
-function startTyping() {
-  if (typingTimer) clearTimeout(typingTimer);
-
+window.addEventListener('DOMContentLoaded', function () {
   var speedInput = document.getElementById('speed');
   var textEl = document.getElementById('text');
-
-  var speedVal = parseInt(speedInput.value);
-  if (isNaN(speedVal) || speedVal < 1) speedVal = 1;
-  if (speedVal > 10) speedVal = 10;
-
-  var delay = 500 / speedVal;
   var fullText = "We love Programming!";
+  var typingTimer = null;
 
-  textEl.innerHTML = '';
+  function startTyping() {
+    if (typingTimer) clearTimeout(typingTimer);
+    textEl.textContent = '';
 
-  for (var i = 0; i < fullText.length; i++) {
-    var span = document.createElement('span');
-    span.className = 'char';
-    span.textContent = fullText[i] === ' ' ? '\u00A0' : fullText[i];
-    textEl.appendChild(span);
-  }
+    var speedVal = parseInt(speedInput.value);
+    if (isNaN(speedVal) || speedVal < 1) speedVal = 1;
+    if (speedVal > 10) speedVal = 10;
 
-  var spans = textEl.querySelectorAll('.char');
-  var index = 0;
+    var delay = 500 / speedVal;
+    var index = 0;
 
-  function typeNext() {
-    if (index < spans.length) {
-      spans[index].classList.add('visible');
-      index++;
-      typingTimer = setTimeout(typeNext, delay);
+    function typeNext() {
+      if (index < fullText.length) {
+        textEl.textContent += fullText[index];
+        index++;
+        typingTimer = setTimeout(typeNext, delay);
+      }
     }
+
+    typeNext();
   }
 
-  typeNext();
-}
+  speedInput.addEventListener('change', startTyping);
+  startTyping();
+});
